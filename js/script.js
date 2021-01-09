@@ -3,9 +3,48 @@
  * Бонусное задание выходного дня
  */
 
+/**
+ * форматирование даты регистрации отдельная функция
+ * принимает @argument timelong время в милисекундах
+ * возвращает @returns timestring форматируемую строку времени
+ */
+function dateFormate(timelong) {
+
+    if (typeof timelong === 'number') {
+
+        console.log('timelong: ', timelong);
+        
+        let date = new Date(timelong);
+        console.log('date: ', date);
+        
+        let year = date.getFullYear();
+        let month = date.getMonth()+1;
+        let day = date.getDate();
+        if (day < 10) {
+            day = '0' + day;
+        }
+        let hour = date.getHours();
+        let min = date.getMinutes();
+        let sec = date.getSeconds();
+        
+        let timeString = `${year}.${month}.${day}-${hour}:${min}:${sec}`;
+        console.log('timeString: ', timeString);
+        
+        return timeString;
+    } else {
+        return;
+    }
+};
+
+
+
+
 //получим кнопки элементы
 const registerBtn = document.getElementById('register-user');
 const loginBtn = document.getElementById('login');
+
+//получаем список куда выводить
+const list = document.querySelector('.list');
 
 // console.log('registerUserBtn: ', registerBtn);
 // console.log(' loginBtn: ',  loginBtn);
@@ -16,23 +55,47 @@ let user = [];
 /** TODO чтение данных пользователя из localStorage  */
 const KEY = 'key';
 //проверка test
-user = [ {
-    firstname: 'Имя',
-    secondname: 'Фамилия',
-    login: 'nawe2020',
-    password: '12345678',
-    regDate: 'Date time'
-} ];
-console.log('user: ', user);
+// user = [ {
+//     firstname: 'Имя',
+//     secondname: 'Фамилия',
+//     login: 'nawe2020',
+//     password: '12345678',
+//     regDate: 'Date time'
+// } ];
+// console.log('user: ', user);
 
 //test очистка
 //localStorage.clear();
 
 //test localStorage запись
-localStorage.setItem(KEY, JSON.stringify(user));
+//localStorage.setItem(KEY, JSON.stringify(user));
 
 //test чтение
-console.log("Данные в хранилище: ", JSON.parse(localStorage.getItem(KEY)) );
+let userData = JSON.parse(localStorage.getItem(KEY));
+//console.log("Данные в хранилище: ", JSON.parse(localStorage.getItem(KEY)) );
+console.log("Данные в хранилище: ", userData );
+
+/*** TODO рендер списка пользователей в хранилище */
+//проверка на непустое хранилище
+if (userData) {
+    user = userData;
+
+    for(let item of user) {
+        console.log(item);
+        let li = document.createElement('li');
+        li.classList.add('list-item');
+        li.innerHTML = `Пользователь: 
+        Имя: <b>${item.firstname}</b> 
+        Фамилия: <b>${item.secondname}</b> 
+        Логин: <b>${item.login}</b> 
+        Дата регистрации: <b>${dateFormate(item.regDate)}</b>`;
+        
+        list.append(li);
+    }
+} else {
+    //user = [];
+    console.log('KEY localStorage пусто');
+}
 
 
 
@@ -76,20 +139,21 @@ registerBtn.addEventListener('click', (event) => {
         let password = prompt('Введите одно слово ПАРОЛЬ пользователя');
         console.log('password: ', password);
         
-        /*** TODO дата регистрации  */
+        /*** ПЕРЕМЕСТИЛИ В отдельную функцию  */
         let date = new Date();
         //сохраняем дату в мс
         let regDate = date.getTime();
         
         
-        let year = date.getFullYear();
-        let month = date.getMonth();
-        let day = date.getDate();
-        let hour = date.getHours();
-        let min = date.getMinutes();
-        let sec = date.getSeconds();
+        // let year = date.getFullYear();
+        // let month = date.getMonth();
+        // let day = date.getDate();
+        // let hour = date.getHours();
+        // let min = date.getMinutes();
+        // let sec = date.getSeconds();
         
-        let timeString = `${year}.${month}.${day}-${hour}:${min}:${sec}`;
+        // let timeString = `${year}.${month}.${day}-${hour}:${min}:${sec}`;
+        let timeString = dateFormate(date.getTime());
         console.log('Дата регистаци timeString: ', timeString);
 
         /** TODO запись данных в массив */
@@ -98,11 +162,8 @@ registerBtn.addEventListener('click', (event) => {
         /** TODO записываем данные пользователя в localStorage */
         console.log(user);
 
-
         //test localStorage запись
         localStorage.setItem(KEY, JSON.stringify(user));
-
-        
 
     } else {
         console.log('Ошибка ввода, Введите только два слова через пробел');

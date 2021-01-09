@@ -23,3 +23,10 @@ button:hover {
     color: #010101;
     border: 1px solid #010101;
 }
+li.list-item {
+    font-family: monospace;
+    font-size: 12px;
+    color: #212121;
+
+    margin: 5px 21px;
+}
