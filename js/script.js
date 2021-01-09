@@ -11,25 +11,25 @@ const loginBtn = document.getElementById('login');
 // console.log(' loginBtn: ',  loginBtn);
 
 //массив данных приложения
-let User = [];
+let user = [];
 
 /** TODO чтение данных пользователя из localStorage  */
 const KEY = 'key';
 //проверка test
-User = [ {
+user = [ {
     firstname: 'Имя',
     secondname: 'Фамилия',
     login: 'nawe2020',
     password: '12345678',
     regDate: 'Date time'
 } ];
-console.log('User: ', User);
+console.log('user: ', user);
 
 //test очистка
-localStorage.clear();
+//localStorage.clear();
 
 //test localStorage запись
-localStorage.setItem(KEY, JSON.stringify(User));
+localStorage.setItem(KEY, JSON.stringify(user));
 
 //test чтение
 console.log("Данные в хранилище: ", JSON.parse(localStorage.getItem(KEY)) );
@@ -77,13 +77,32 @@ registerBtn.addEventListener('click', (event) => {
         console.log('password: ', password);
         
         /*** TODO дата регистрации  */
-        let regDate = new Date();
+        let date = new Date();
+        //сохраняем дату в мс
+        let regDate = date.getTime();
+        
+        
+        let year = date.getFullYear();
+        let month = date.getMonth();
+        let day = date.getDate();
+        let hour = date.getHours();
+        let min = date.getMinutes();
+        let sec = date.getSeconds();
+        
+        let timeString = `${year}.${month}.${day}-${hour}:${min}:${sec}`;
+        console.log('Дата регистаци timeString: ', timeString);
 
         /** TODO запись данных в массив */
-        User.push({ firstname, secondname, login, password, regDate });
+        user.push({ firstname, secondname, login, password, regDate });
         
         /** TODO записываем данные пользователя в localStorage */
-        console.log(User);
+        console.log(user);
+
+
+        //test localStorage запись
+        localStorage.setItem(KEY, JSON.stringify(user));
+
+        
 
     } else {
         console.log('Ошибка ввода, Введите только два слова через пробел');
@@ -108,5 +127,5 @@ loginBtn.addEventListener('click', () => {
 });
 
 
- alert('hello');
+//  alert('hello');
 
